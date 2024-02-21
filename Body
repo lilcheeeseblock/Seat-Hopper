@@ -1,0 +1,92 @@
+import random as r
+import numpy as np
+import matplotlib.pyplot as plt
+
+#Creating variables for loops
+cycles = int(input("Choose number of loops: "))
+num = int(input("Choose Row Length: "))
+mRow3 = []
+mRow2 = []
+a = 1
+for i in range(cycles):
+    
+#array that will store the mean times for hops
+    mRow = []
+
+#loops the system that creates the random row of students
+    for i in range(cycles):
+
+    #row that holds students
+        row = []
+
+    #seating the students
+        for i in range(num):
+
+        #randomizing the chance of a student sitting down
+            chance = r.randint(0,100)
+
+        #1/3 chance of a student taking a seat with no jumps/hops
+            if 33 < chance <= 66:
+                row.insert(0,1)
+
+        #1/3 chance of a student sitting and skipping a seat
+            elif 67 <= chance:
+            
+            #randomizing the number of skipped seats based on seat availability 
+                chance2 = r.randint(len(row), num)
+            
+            #based on that chance, skip pick a seat after skipping a corresponding # of seats
+                for i in range(chance2 - (1+len(row))):
+                    row.append(0)
+                row.append(1)
+
+
+        #ensures the array containing the row of students isn't longer than intended
+            if len(row) == num:
+                break
+
+
+
+    #if the last seat taken is not the last seat in the row then complete the array with empty seats
+        if len(row) < num:
+            for i in range(num - len(row)):
+                row.append(0)
+    
+    #add the average # of hops to an array (the mean function would return the % of seats taken)
+        mRow.append(np.mean(row) * len(row))
+        mRow3.append(np.mean(row))
+
+#creating arange to be able to map mRow as x gets larger
+    x = np.arange(0,len(mRow), 1)
+    average = np.mean(mRow)
+
+#create an array for the average of the averages
+    y = []
+    for i in range(len(mRow)):
+        y.append(average)
+
+#plot the array containing the mean times in a labeled figure
+    #plt.figure(a)
+    #plt.xlabel("Number of Times a Sample Row was Made")
+    #plt.ylabel("Average Time Taken to 'Fill' a Row")
+
+#since I used ones and zeroes, the mean students per row corresponds to the average itterations to fill a row
+    #plt.title("Mean Number of Students per Row")
+
+#plot the mean time taken to fill a row across the number of rows and the average of those means
+    #plt.plot(x, mRow, 'r-')
+    #plt.plot(x, y, 'g-')
+    average2 = np.mean(mRow3)
+    mRow2.append(average)
+    a += 1
+#print the standard deviation
+print(np.std(mRow))
+print(np.sqrt(num))
+print(np.sqrt(cycles))
+print(average)
+
+x = np.arange(0,len(mRow), 1)
+plt.figure(1)
+plt.plot(x, mRow2, 'b-')
+
+print()
